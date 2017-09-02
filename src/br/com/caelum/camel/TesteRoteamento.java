@@ -14,9 +14,18 @@ public class TesteRoteamento {
 			
 			@Override
 			public void configure() throws Exception {
+				
+				errorHandler(
+					deadLetterChannel("file:falha").
+						useOriginalMessage().
+							maximumRedeliveries(2).
+								redeliveryDelay(2000).
+									retryAttemptedLogLevel(LoggingLevel.ERROR)
+						);
+				
 				from("file:entrada?delay=5s").
-					log(LoggingLevel.INFO, "Processando mensagem ${id}").
-						to("file:saida");
+					to("validator:file:xsd/pedido.xsd").
+					to("file:saida");
 			}
 		});
 		context.start();
