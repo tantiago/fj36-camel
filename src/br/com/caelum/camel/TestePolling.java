@@ -68,7 +68,7 @@ public class TestePolling {
 						}
 					})
 					.setBody(
-						simple("insert into Livros (nomeAutor) values ('#{headers[nomeAutor]}')")
+						simple("insert into Livros (nomeAutor) values ('${headers[nomeAutor]}')")
 							)
 					.to("jdbc:mysqlDataSource?useHeadersAsParameters=true");
 			}			
